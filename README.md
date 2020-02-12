@@ -8,4 +8,5 @@ Write a program in the C programming language that calculates the MD5 hash diges
 - To be filled later .........
 
 ## Research and Project Progress Summary
+<b>Week 1:</b> In the first week I watched the video on how to set up my google cloud virtual machine and proceeded to do this myself. I also did some reading into MD5 message Digest Algorithm by reading a document describing the algorithm. [1]. I also watched some videos on the algorithm to further my understanding on the topic. [2]. I also did some basic coding in C and python from the video and as C is the chosen language for this project I looked back over the basics of C as well as projects I had previously coded in the language. I also played around with VI as I hadn't used this since 2nd year.
 
