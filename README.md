@@ -12,7 +12,11 @@ Write a program in the C programming language that calculates the MD5 hash diges
 
 <b>Week 2:</b> In the second week I watched the video on SHA Standard. I then read over the document covered in the video a few days after watching it. [3]. I then read some sites talking about the differences between MD5 and SHA hash algorithms to improve my knowledge of the algorithms. [4] [5]. These sites compare them in many areas such as speed and security (i.e. SHA is more secure but slower, MD5 is faster but less secure). They also explain how each in them work in very simplistic terms which was very helpful for me to visualise the algorithms in comparison with the large documents read previously. 
 
-<b>Week 3:</b> In week 3 I read over the MD5 and SHA documents [1][3] from previous weeks as I felt I understood them better and that now the documents would make more sense now that my understanding had improved. I then watched the video on bit operations in C. I then played around with the bits in C to help understand how they work. When finished the video, I had a look over the recommended documentation in the video [6] [7] as suggested by the lecturer.
+<b>Week 3:</b> In the third week, I read over the MD5 and SHA documents [1][3] from previous weeks as I felt I understood them better and that now the documents would make more sense now that my understanding had improved. I then watched the video on bit operations in C. I then played around with the bits in C to help understand how they work. When finished the video, I had a look over the recommended documentation in the video [6] [7] as suggested by the lecturer.
+
+<b>Week 4-5:</b> In the fourth week, I looked at the video on functions and constants in SHA and followed along with the coding recommended in the video. I also read over the paragraph in the SHA documentation in section 4.1.2 on functions to help understand it. [3]. 
+In the fifth week, I looked at the padding video on the SHA padding and how it works, as well as reading into the padding in SHA. I also did some research as to how the padding works in MD5 by reading the sections on padding in the RFC document about MD5 in section 3.1 and 3.2. [1].
+
 
 ### References
 [1] https://tools.ietf.org/html/rfc1321
