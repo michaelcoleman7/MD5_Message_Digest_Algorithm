@@ -1,3 +1,6 @@
+// Michael Coleman
+// SHA 256 Documentation: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
+// The Secure Hash Algorithm 256-bit version.
 #include <stdio.h>
 #include <stdint.h>
 
@@ -20,13 +23,6 @@ const uint32_t K[] = {
   0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
   0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
-
-// Section 5.3.3
-uint32_t H[] = {
-  0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
-  0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19  
-};
-
 
 uint32_t Ch(uint32_t x, uint32_t y, uint32_t z) {
   // Section 4.1.2
@@ -68,30 +64,83 @@ uint32_t sig1(uint32_t x) {
   return ROTR(x, 17) ^ ROTR(x, 19) ^ SHR(x, 10);
 }
 
+union block {
+  uint64_t sixfour[8];
+  uint32_t threetwo[16];
+  uint8_t eight[64];
+};
+
+enum flag {READ, PAD0, PAD1, FINISH};
+
+uint64_t nozerobytes(uint64_t nobits) {
+
+  uint64_t result = 512ULL - (nobits % 512ULL);
+  
+  if (result < 65)
+    result += 512;
+
+  result -= 72;
+
+  return (result / 8ULL);
+}
+
+int nextblock(union block *M, FILE *infile, uint64_t *nobits, enum flag *status) {
+  
+  uint8_t i;
+
+  for (*nobits = 0, i = 0; fread(&M.eight[i], 1, 1, infile) == 1; *nobits += 8) {
+    printf("%02" PRIx8, M.eight[i]);
+  }
+  
+  printf("%02" PRIx8, 0x80); // Bits: 1000 0000
+
+  for (uint64_t i = nozerobytes(*nobits); i > 0; i--)
+    printf("%02" PRIx8, 0x00);
+
+
+  printf("%016" PRIx64 "\n", *nobits);
+
+}
+
+void nexthash(union block *M, uint32_t *H) {
+
+
+}
 
 int main(int argc, char *argv[]) {
 
-  uint32_t x = 0x0f0f0f0f;
-  uint32_t y = 0xcccccccc;
-  uint32_t z = 0x55555555;
+  if (argc != 2) {
+    printf("Error: expected single filename as argument.\n");
+    return 1;
+  }
 
-  printf("x          = %08x\n", x);
-  printf("y          = %08x\n", y);
-  printf("z          = %08x\n", z);
+  FILE *infile = fopen(argv[1], "rb");
+  if (!infile) {
+    printf("Error: couldn't open file %s.\n", argv[1]);
+    return 1;
+  }
 
-  printf("Ch(x,y,z)  = %08x\n", Ch(x, y, z));
-  printf("Maj(x,y,z) = %08x\n", Maj(x, y, z));
+  // Section 5.3.3
+  uint32_t H[] = {
+    0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+    0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19  
+  };
+  
+  // The current padded message block.
+  union block M;
+  uint64_t nobits = 0;
+  enum flag status = READ;
 
-  printf("SHR(x,4)   = %08x\n", SHR(x, 4));
-  printf("ROTR(x,4)  = %08x\n", ROTR(x, 4));
+  // Read through all of the padded message blocks.
+  while (nextblock(&M, infile, nobits, status)) {
+    // Calculate the next hash value.
+    nexthash(&M, &H);
+  }
 
-  printf("Sig0(x)    = %08x\n", Sig0(x));
-  printf("Sig1(x)    = %08x\n", Sig1(x));
-  printf("sig0(x)    = %08x\n", sig0(x));
-  printf("sig1(x)    = %08x\n", sig1(x));
-
-  printf("K[20]      = %08x\n", K[20]);
-  printf("H[2]       = %08x\n", H[2]);
+  for (int i = 0; i < 8; i++)
+    printf("%02" PRIX32, H[i]);
+  printf("\n");
+  fclose(infile);
 
   return 0;
 }
