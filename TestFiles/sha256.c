@@ -2,7 +2,7 @@
 // SHA 256 Documentation: https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf
 // The Secure Hash Algorithm 256-bit version.
 #include <stdio.h>
-#include <stdint.h>
+#include <inttypes.h>
 
 // Section 4.2.2
 const uint32_t K[] = {
@@ -70,36 +70,40 @@ union block {
   uint8_t eight[64];
 };
 
-enum flag {READ, PAD0, PAD1, FINISH};
-
-uint64_t nozerobytes(uint64_t nobits) {
-
-  uint64_t result = 512ULL - (nobits % 512ULL);
-  
-  if (result < 65)
-    result += 512;
-
-  result -= 72;
-
-  return (result / 8ULL);
-}
+enum flag {READ, PAD0, FINISH};
 
 int nextblock(union block *M, FILE *infile, uint64_t *nobits, enum flag *status) {
   
-  uint8_t i;
+  if (*status == FINISH)
+  return 0;
 
-  for (*nobits = 0, i = 0; fread(&M.eight[i], 1, 1, infile) == 1; *nobits += 8) {
-    printf("%02" PRIx8, M.eight[i]);
+  if (*status == PAD0) {
+  for (int i = 0; i < 56; i++)
+    M->eight[i] = 0;
+  M->sixfour[7] = *nobits;
+  *status = FINISH;
+  return 1;
+
+  size_t nobytesread = fread(M->eight, 1, 64, infile);
+  if (nobytesread == 64)
+    return 1;
+
+  // If we can fit all padding in last block:
+  if (nobytesread < 56) {
+    M->eight[nobytesread] = 0x80;
+    for (int i = nobytesread + 1; i < 56; i++)
+      M->eight[i] = 0;
+    M->sixfour[7] = *nobits;
+    *status = FINISH;
+    return 1;
   }
-  
-  printf("%02" PRIx8, 0x80); // Bits: 1000 0000
 
-  for (uint64_t i = nozerobytes(*nobits); i > 0; i--)
-    printf("%02" PRIx8, 0x00);
-
-
-  printf("%016" PRIx64 "\n", *nobits);
-
+  // Otherwise we have read between 56 (incl) and 64 (excl) bytes.
+  M->eight[nobytesread] = 0x80;
+  for (int i = nobytesread + 1; i < 64; i++)
+    M->eight[i] = 0;
+  *status = PAD0;
+  return 1;
 }
 
 void nexthash(union block *M, uint32_t *H) {
@@ -152,13 +156,13 @@ int main(int argc, char *argv[]) {
   enum flag status = READ;
 
   // Read through all of the padded message blocks.
-  while (nextblock(&M, infile, nobits, status)) {
+  while (nextblock(&M, infile, &nobits, &status)) {
     // Calculate the next hash value.
-    nexthash(&M, &H);
+    nexthash(&M, H);
   }
 
   for (int i = 0; i < 8; i++)
-    printf("%02" PRIX32, H[i]);
+    printf("%02" PRIX32 "", H[i]);
   printf("\n");
   fclose(infile);
 
