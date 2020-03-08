@@ -2,6 +2,8 @@ hello
 lookatbits
 sha256
 padding
+refactor
+endian
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
