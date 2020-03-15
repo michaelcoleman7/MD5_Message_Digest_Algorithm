@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include <inttypes.h>
 
 //F,G,H,I functions - APPENDIX A - Reference Implementation - section: A.3 md5c.c
 #define F(x, y, z)((x & y) | (~x & z)) 
@@ -14,6 +15,13 @@
 #define GG(a,b,c,d,x,s,ac) { a += G(b,c,d) + x + ac; a = b + ROTLEFT(a,s); a += b;}
 #define HH(a,b,c,d,x,s,ac) { a += H(b,c,d) + x + ac; a = b + ROTLEFT(a,s); a += b;} 
 #define II(a,b,c,d,x,s,ac) { a += I(b,c,d) + x + ac; a = b + ROTLEFT(a,s); a += b;} 
+
+/* MD5 context. */
+typedef struct {
+  uint32_t  state[4];//state (ABCD)
+  uint32_t  count[2];//number of bits, modulo 2^64 (lsb first) 
+  unsigned char buffer[64];//input buffer
+} MD5_CTX;
 
 // Section 2
 #define WORD uint32_t
