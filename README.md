@@ -17,6 +17,11 @@ Write a program in the C programming language that calculates the MD5 hash diges
 <b>Week 4-5:</b> In the fourth week, I looked at the video on functions and constants in SHA and followed along with the coding recommended in the video. I also read over the paragraph in the SHA documentation in section 4.1.2 on functions to help understand it. [3]. 
 In the fifth week, I looked at the padding video on the SHA padding and how it works, as well as reading into the padding in SHA. I also did some research as to how the padding works in MD5 by reading the sections on padding in the RFC document about MD5 in section 3.1 and 3.2. [1].
 
+<b>Week 5-7:</b> In week 5, I watched the video on unions that was put up on Moodle and coded up the unions file. After watching this, I then went and looked up the comparisons of a union vs a struct as I was already familiar with these. [8]. The sixth week involved watching the merging of padding with the hashing, I then carried out this in my own code. In the seventh week, I watched both the hash function video and finalising the padding videos and again followed along in my own repository. 
+
+<b>Week 8:</b> In week 8, I followed the video on testing and refactoring the code and carried this out in my project. I then looked back at the code I had previously written and looked at the comparisons to see the scale of changes that the refactoring of the code had done to the project. 
+
+
 
 ### References
 [1] https://tools.ietf.org/html/rfc1321
@@ -32,3 +37,5 @@ In the fifth week, I looked at the padding video on the SHA padding and how it w
 [6] https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html#Expressions-and-Operators
 
 [7] https://graphics.stanford.edu/~seander/bithacks.html
+
+[8] https://www.geeksforgeeks.org/difference-structure-union-c/
