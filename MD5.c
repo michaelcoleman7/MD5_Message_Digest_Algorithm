@@ -67,17 +67,15 @@ typedef struct {
   unsigned char buffer[64]; //input buffer
 } MD5_CTX;
 
-void md5_transform(MD5_CTX *context, char buffer[]) 
+void MD5_Transform(MD5_CTX *context, char input[]) 
 {  
    int a,b,c,d;
    int message[16];
    
-   // MD5 specifies big endian byte order, but this implementation assumes a little 
-   // endian byte order CPU. Reverse all the bytes upon input, and re-reverse them 
-   // on output (in md5_final()). 
-   int i,j;
+  // Referenced from RFC Document - page 14
+   unsigned int i,j;
    for (i=0, j=0; i < 16; ++i, j += 4) {
-     message[i] = (buffer[j]) + (buffer[j+1] << 8) + (buffer[j+2] << 16) + (buffer[j+3] << 24); 
+     message[i] = (input[j]) + (input[j+1] << 8) + (input[j+2] << 16) + (input[j+3] << 24); 
    }
    
    //set initial values for states
@@ -86,6 +84,7 @@ void md5_transform(MD5_CTX *context, char buffer[])
    c = context->state[2]; 
    d = context->state[3]; 
    
+   // RFC document pages 13 and 14 for round values
    FF(a,b,c,d,message[0], S11,K[0]); 
    FF(d,a,b,c,message[1], S12,K[1]); 
    FF(c,d,a,b,message[2], S13,K[2]); 
@@ -159,6 +158,14 @@ void md5_transform(MD5_CTX *context, char buffer[])
    context->state[1] += b; 
    context->state[2] += c; 
    context->state[3] += d; 
+}  
+
+void MD5_Init(MD5_CTX *context) 
+{  
+   context->state[0] = 0x67452301; 
+   context->state[1] = 0xEFCDAB89; 
+   context->state[2] = 0x98BADCFE; 
+   context->state[3] = 0x10325476; 
 }  
 
 
