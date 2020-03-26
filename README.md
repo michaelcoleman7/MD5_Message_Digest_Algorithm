@@ -14,7 +14,7 @@ MD5 message digest algorithm is used to produce a 128-bit message digest. MD5 ta
 MD5 is padded such that its length in bits is agreeable to 448 modulo 512. Padding is done so that the total bits are 64 less being a multiple of 512 bits length. Padding is carried out even If the is already in the form of 448 modulo 512.
 
  ### Append length
-64 bits are inserted at the end representing the length of the original message, modulo 264
+64 bits are inserted at the end representing the length of the original message, modulo 2^64
 
 ### Initialise MD Buffer
 A four-word buffer (A, B, C, D) is used to compute the values for the message digest. A, B, C, D are 32- bit registers. These are mapped to a set of hexadecimal values
