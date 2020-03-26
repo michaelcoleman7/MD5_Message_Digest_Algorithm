@@ -7,6 +7,35 @@ Write a program in the C programming language that calculates the MD5 hash diges
 ## How to run program
 - To be filled later .........
 
+## MD5 Overview
+MD5 message digest algorithm is used to produce a 128-bit message digest. MD5 takes the plain text of 512-bit blocks which is divided into 16 blocks, each of 32 bit and produces the 128-bit message digest which is a set of four blocks, each of 32 bits. MD5 produces the message digest through the following steps:
+
+### Append Padding Bits
+MD5 is padded such that its length in bits is agreeable to 448 modulo 512. Padding is done so that the total bits are 64 less being a multiple of 512 bits length. Padding is carried out even If the is already in the form of 448 modulo 512.
+
+ ### Append length
+64 bits are inserted at the end representing the length of the original message, modulo 264
+
+### Initialise MD Buffer
+A four-word buffer (A, B, C, D) is used to compute the values for the message digest. A, B, C, D are 32- bit registers. These are mapped to a set of hexadecimal values
+-	word A: 01 23 45 67
+-	word B: 89 ab cd ef
+-	word C: fe dc ba 98
+-	word D: 76 54 32 10
+
+### Process Message in 16-Word Blocks
+MD5 uses the auxiliary functions which take the input as three 32-bit number and produces a 32-bit output. 
+-	F(X,Y,Z) = XY v not(X) Z
+-	G(X,Y,Z) = XZ v Y not(Z)
+-	H(X,Y,Z) = X xor Y xor Z
+-	I(X,Y,Z) = Y xor (X v not(Z))
+
+The content of the four buffers are mixed with the input using this auxiliary buffer and 16 rounds are performed using 16 basic operations.
+
+### Output
+The message digest produced as output is A, B, C, D. Beginning at low-order byte of A and ending with the high-order byte of D.
+
+
 ## Research and Project Progress Summary
 <b>Week 1:</b> In the first week I watched the video on how to set up my google cloud virtual machine and proceeded to do this myself. I also did some reading into MD5 message Digest Algorithm by reading a document describing the algorithm. [1]. I also watched some videos on the algorithm to further my understanding on the topic. [2]. I also did some basic coding in C and python from the video and as C is the chosen language for this project I looked back over the basics of C as well as projects I had previously coded in the language. I also played around with VI as I hadn't used this since 2nd year.
 
