@@ -5,25 +5,41 @@
 #include <inttypes.h>
 
 //F,G,H,I functions, RFC Document  - APPENDIX A - Reference Implementation - section: A.3 md5c.c
-#define F(x, y, z)((x & y) | (~x & z)) 
-#define G(x, y, z) ((x & z) | (y & ~z))
-#define H(x, y, z) (x ^ y ^ z)
-#define I(x, y, z) (y ^ (x | ~z))
+#define F(x, y, z) (((x) & (y)) | ((~x) & (z)))
+#define G(x, y, z) (((x) & (z)) | ((y) & (~z)))
+#define H(x, y, z) ((x) ^ (y) ^ (z))
+#define I(x, y, z) ((y) ^ ((x) | (~z))) 
 
 //ROTATE_LEFT function, RFC Document - APPENDIX A - Reference Implementation - section: A.3 md5c.c
 #define ROTATE_LEFT(x, n) ((x << n) | (x >> (32-n)))
 
 //FF,GG,HH,II , RFC Document - APPENDIX A - Reference Implementation - section: A.3 md5c.c
-#define FF(a,b,c,d,x,s,ac) { a += F(b,c,d) + x + ac; a = b + ROTLEFT(a,s); a += b;}
-#define GG(a,b,c,d,x,s,ac) { a += G(b,c,d) + x + ac; a = b + ROTLEFT(a,s); a += b;}
-#define HH(a,b,c,d,x,s,ac) { a += H(b,c,d) + x + ac; a = b + ROTLEFT(a,s); a += b;} 
-#define II(a,b,c,d,x,s,ac) { a += I(b,c,d) + x + ac; a = b + ROTLEFT(a,s); a += b;} 
+#define FF(a, b, c, d, x, s, ac) \
+  {(a) += F ((b), (c), (d)) + (x) + (UINT4)(ac); \
+   (a) = ROTATE_LEFT ((a), (s)); \
+   (a) += (b); \
+  }
+#define GG(a, b, c, d, x, s, ac) \
+  {(a) += G ((b), (c), (d)) + (x) + (UINT4)(ac); \
+   (a) = ROTATE_LEFT ((a), (s)); \
+   (a) += (b); \
+  }
+#define HH(a, b, c, d, x, s, ac) \
+  {(a) += H ((b), (c), (d)) + (x) + (UINT4)(ac); \
+   (a) = ROTATE_LEFT ((a), (s)); \
+   (a) += (b); \
+  }
+#define II(a, b, c, d, x, s, ac) \
+  {(a) += I ((b), (c), (d)) + (x) + (UINT4)(ac); \
+   (a) = ROTATE_LEFT ((a), (s)); \
+   (a) += (b); \
+  }
 
-// Section 2 of RTF Document
-#define WORD uint32_t
+// UINT4 defines a four byte word
+typedef unsigned long int UINT4;
 
 // Constants used transform rounds 1-4, pages 12-13 of RTF Document
-const WORD K[] = {
+const UINT4 K[] = {
   0xd76aa478,0xe8c7b756,0x242070db,0xc1bdceee,
   0xf57c0faf,0x4787c62a,0xa8304613,0xfd469501,
   0x698098d8,0x8b44f7af,0xffff5bb1,0x895cd7be,
@@ -40,6 +56,12 @@ const WORD K[] = {
   0x655b59c3,0x8f0ccc92,0xffeff47d,0x85845dd1,
   0x6fa87e4f,0xfe2ce6e0,0xa3014314,0x4e0811a1,
   0xf7537e82,0xbd3af235,0x2ad7d2bb,0xeb86d391
+};
+
+static unsigned char PADDING[64] = {
+  0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 // Constants for MD5Transform routine,page 9 of RTF Document
@@ -62,8 +84,8 @@ const WORD K[] = {
 
 // MD5 context.
 typedef struct {
-  uint32_t  state[4]; //state (ABCD)
-  uint32_t  count[2]; //number of bits, modulo 2^64 (lsb first) 
+  UINT4  state[4]; //state (ABCD)
+  UINT4  count[2]; //number of bits, modulo 2^64 (lsb first) 
   unsigned char buffer[64]; //input buffer
 } MD5_CTX;
 
