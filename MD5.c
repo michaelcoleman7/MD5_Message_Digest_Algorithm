@@ -89,24 +89,29 @@ typedef struct {
   unsigned char buffer[64]; //input buffer
 } MD5_CTX;
 
-void MD5_Transform(MD5_CTX *context, char input[]) 
+//MD5 initialization method, Begins an MD5 operation, writing a new context
+void MD5Init(MD5_CTX *context) 
 {  
-  int a,b,c,d;
-  int message[16];
-  
-// Referenced from RFC Document - page 14
-  unsigned int i,j;
-  for (i=0, j=0; i < 16; ++i, j += 4) {
-    message[i] = (input[j]) + (input[j+1] << 8) + (input[j+2] << 16) + (input[j+3] << 24); 
-  }
-  
-  //set initial values for states
-  a = context->state[0]; 
-  b = context->state[1]; 
-  c = context->state[2]; 
-  d = context->state[3]; 
-  
-  // RFC document pages 13 and 14 for round values
+  //initials counts to zero
+  context->count[0] = context->count[1] = 0;
+  // Load magic initialization constants to set state values
+  context->state[0] = 0x67452301; 
+  context->state[1] = 0xEFCDAB89; 
+  context->state[2] = 0x98BADCFE; 
+  context->state[3] = 0x10325476; 
+}  
+
+// MD5 basic transformation. Transforms state based on block.
+static void MD5Transform (UINT4 *state, UINT4 *message)
+{
+  UINT4 a,b,c,d;
+  a = state[0];
+  b = state[1];
+  c = state[2];
+  d = state[3];
+
+  // RFC document pages 13 and 14 for round values - 4 rounds
+  //round 1 - FF Function
   FF(a,b,c,d,message[0], S11,K[0]); 
   FF(d,a,b,c,message[1], S12,K[1]); 
   FF(c,d,a,b,message[2], S13,K[2]); 
@@ -124,6 +129,7 @@ void MD5_Transform(MD5_CTX *context, char input[])
   FF(c,d,a,b,message[14],S13,K[14]); 
   FF(b,c,d,a,message[15],S14,K[15]); 
   
+  //round 2 - GG Function
   GG(a,b,c,d,message[1], S21,K[16]); 
   GG(d,a,b,c,message[6], S22,K[17]); 
   GG(c,d,a,b,message[11],S23,K[18]); 
@@ -141,6 +147,7 @@ void MD5_Transform(MD5_CTX *context, char input[])
   GG(c,d,a,b,message[7], S23,K[30]); 
   GG(b,c,d,a,message[12],S24,K[31]);
   
+  //round 3 - HH Function
   HH(a,b,c,d,message[5], S31,K[32]); 
   HH(d,a,b,c,message[8], S32,K[33]); 
   HH(c,d,a,b,message[11],S33,K[34]); 
@@ -158,6 +165,7 @@ void MD5_Transform(MD5_CTX *context, char input[])
   HH(c,d,a,b,message[15],S33,K[46]); 
   HH(b,c,d,a,message[2], S34,K[47]); 
     
+  //round 4 - II Function
   II(a,b,c,d,message[0], S41,K[48]); 
   II(d,a,b,c,message[7], S42,K[49]); 
   II(c,d,a,b,message[14],S43,K[50]); 
@@ -174,22 +182,13 @@ void MD5_Transform(MD5_CTX *context, char input[])
   II(d,a,b,c,message[11],S42,K[61]); 
   II(c,d,a,b,message[2], S43,K[62]); 
   II(b,c,d,a,message[9], S44,K[63]); 
-   
-  // add the hash value onto each state
-  context->state[0] += a; 
-  context->state[1] += b; 
-  context->state[2] += c; 
-  context->state[3] += d; 
-}  
 
-void MD5_Init(MD5_CTX *context) 
-{  
-  context->count[0] = context->count[1] = 0;
-  context->state[0] = 0x67452301; 
-  context->state[1] = 0xEFCDAB89; 
-  context->state[2] = 0x98BADCFE; 
-  context->state[3] = 0x10325476; 
-}  
+  //update states after rounds
+  state[0] += a;
+  state[1] += b;
+  state[2] += c;
+  state[3] += d;
+}
 
 
 
@@ -197,6 +196,6 @@ void MD5_Init(MD5_CTX *context)
 
 
 
-int main(int argc, char *argv[]) {
+int main() {
 
 }
