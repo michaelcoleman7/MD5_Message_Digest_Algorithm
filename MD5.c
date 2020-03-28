@@ -190,11 +190,34 @@ static void MD5Transform (UINT4 *state, UINT4 *message)
   state[3] += d;
 }
 
+//MD5 block update operation. Continues an MD5 message-digest operation, processing another message block, and updating the context
+void MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen)
+{
+  UINT4 block[16];
+  int index;
+  unsigned int i, j;
 
+  // compute the number of bytes mod 64
+  index = ((context->count[0] >> 3) & 0x3F);
 
+  // update the number of bits
+  if ((context->count[0] + ((UINT4)inputLen << 3)) < context->count[0])
+    context->count[1]++;
+  context->count[0] += ((UINT4)inputLen << 3);
+  context->count[1] += ((UINT4)inputLen >> 29);
 
-
-
+  while (inputLen--) {
+    // add new character to buffer, increment the index
+    context->buffer[index++] = *input++;
+    // Transform as many times as possible.
+    if (index == 64) {
+      for (i = 0, j = 0; i < 16; i++, j += 4)
+        block[i] = (context->buffer[j]) | ((context->buffer[j+1]) << 8) | ((context->buffer[j+2]) << 16) | ((context->buffer[j+3]) << 24);
+      MD5Transform (context->state, block);
+      index = 0;
+    }
+  }
+}
 
 int main() {
 
