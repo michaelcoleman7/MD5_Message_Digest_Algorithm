@@ -2,7 +2,6 @@
 //RFC Document used in implementation - https://tools.ietf.org/html/rfc1321
 
 #include<stdio.h>
-#include <inttypes.h>
 
 //F,G,H,I functions, RFC Document  - APPENDIX A - Reference Implementation - section: A.3 md5c.c
 #define F(x, y, z) (((x) & (y)) | ((~x) & (z)))
@@ -85,8 +84,9 @@ static unsigned char PADDING[64] = {
 // MD5 context.
 typedef struct {
   UINT4  state[4]; //state (ABCD)
-  UINT4  count[2]; //number of bits, modulo 2^64 (lsb first) 
+  UINT4  count[2]; //number of bits, modulo 2^64
   unsigned char buffer[64]; //input buffer
+  unsigned char finalDigest[16]; // final digest value after MD5Final has been called
 } MD5_CTX;
 
 //MD5 initialization method, Begins an MD5 operation, writing a new context
@@ -190,12 +190,11 @@ static void MD5Transform (UINT4 *state, UINT4 *message)
   state[3] += d;
 }
 
-//MD5 block update operation. Continues an MD5 message-digest operation, processing another message block, and updating the context
+//MD5 block update operation. Continues an MD5 message-digest operation, processing another message block, and updating the context, Note: input and input length both refer to same input block
 void MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen)
 {
   UINT4 block[16];
-  int index;
-  unsigned int i, j;
+  unsigned int i, j, index;
 
   // compute the number of bytes mod 64
   index = ((context->count[0] >> 3) & 0x3F);
@@ -206,6 +205,7 @@ void MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen)
   context->count[0] += ((UINT4)inputLen << 3);
   context->count[1] += ((UINT4)inputLen >> 29);
 
+  //decrement though length until 0
   while (inputLen--) {
     // add new character to buffer, increment the index
     context->buffer[index++] = *input++;
@@ -219,6 +219,46 @@ void MD5Update (MD5_CTX *context, unsigned char *input, unsigned int inputLen)
   }
 }
 
-int main() {
+//MD5 finalization. calculates final digest and ends an MD5 message-digest operation
+void MD5Final (MD5_CTX *context)
+{
+  UINT4 block[16];
+  unsigned int i, j, index, padLen;
 
+  // save the number of bits to blocks last 2 bits
+  block[14] = context->count[0];
+  block[15] = context->count[1];
+
+  // pad out to 56 mod 64
+  index = ((context->count[0] >> 3) & 0x3F);
+  padLen = (index < 56) ? (56 - index) : (120 - index);
+  MD5Update (context, PADDING, padLen);
+
+  // append length in bits and transform (run to 14 as last 2 blocks already filled)
+  for (i = 0, j = 0; i < 14; i++, j += 4) 
+    block[i] = (context->buffer[j]) | ((context->buffer[j+1]) << 8)  | ((context->buffer[j+2]) << 16) | ((context->buffer[j+3]) << 24);
+  MD5Transform (context->state, block);
+
+  // update final digest value digest
+  for (i = 0, j = 0; i < 4; i++, j += 4) {
+    context->finalDigest[j] = (context->state[i] & 0xFF);
+    context->finalDigest[j+1] =((context->state[i] >> 8) & 0xFF);
+    context->finalDigest[j+2] =((context->state[i] >> 16) & 0xFF);
+    context->finalDigest[j+3] =((context->state[i] >> 24) & 0xFF);
+  }
+}
+
+int main() {
+  MD5_CTX context;
+  char testString[50] = "abc";
+  unsigned int len = strlen (testString);
+  int i;
+
+  MD5Init (&context);
+  MD5Update (&context, testString, len);
+  MD5Final (&context);
+  printf ("(\"%s\") = ", testString);
+    for (i = 0; i < 16; i++)
+    printf ("%02x", context.finalDigest[i]);
+  printf ("\n\n");
 }
