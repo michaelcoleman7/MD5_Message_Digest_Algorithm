@@ -248,17 +248,55 @@ void MD5Final (MD5_CTX *context)
   }
 }
 
-int main() {
+//Main method ran when file is ran
+int main()
+{
+  int option;
+  char optionVal[50];
   MD5_CTX context;
-  char testString[50] = "abc";
-  unsigned int len = strlen (testString);
+  unsigned int len;
   int i;
 
-  MD5Init (&context);
-  MD5Update (&context, testString, len);
-  MD5Final (&context);
-  printf ("(\"%s\") = ", testString);
-    for (i = 0; i < 16; i++)
-    printf ("%02x", context.finalDigest[i]);
-  printf ("\n\n");
+  // Menu Options
+  printf("1 - Enter a String to be hashed using MD5\n"); 
+  printf("2 - Enter a File to be hashed using MD5\n"); 
+  printf("3 - Run Test Cases on MD5\n"); 
+  printf("4 - Exit\n");  
+	scanf("%d", &option);
+
+	while (option != -1)
+	{
+		switch (option)
+		{
+		case 1:
+      printf("Please enter the String you wish to Hash: \n");
+      scanf("%s", optionVal);
+        len = strlen (optionVal);
+
+        // carry out hashing of string etered
+        MD5Init (&context);
+        MD5Update (&context, optionVal, len);
+        MD5Final (&context);
+
+        // print out original string
+        printf ("(\"%s\") = ", optionVal);
+          for (i = 0; i < 16; i++)
+          // print out result
+          printf ("%02x", context.finalDigest[i]);
+        printf ("\n\n");
+			break;
+		default:
+      // user enters a non specified number
+			printf("\nInvalid Input, Please Try Again\n\n");
+			break;
+		}
+
+  // Recall Menu Options
+  printf("1 - Enter a String to be hashed using MD5\n"); 
+  printf("2 - Enter a File to be hashed using MD5\n"); 
+  printf("3 - Run Test Cases from MD5 Documnetation\n"); 
+  printf("4 - Exit\n");  
+	scanf("%d", &option);
+	}
+  return 0;
 }
