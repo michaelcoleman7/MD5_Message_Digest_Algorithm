@@ -239,13 +239,24 @@ void MD5Final (MD5_CTX *context)
     block[i] = (context->buffer[j]) | ((context->buffer[j+1]) << 8)  | ((context->buffer[j+2]) << 16) | ((context->buffer[j+3]) << 24);
   MD5Transform (context->state, block);
 
-  // update final digest value digest
+  // update final digest value
   for (i = 0, j = 0; i < 4; i++, j += 4) {
     context->finalDigest[j] = (context->state[i] & 0xFF);
     context->finalDigest[j+1] =((context->state[i] >> 8) & 0xFF);
     context->finalDigest[j+2] =((context->state[i] >> 16) & 0xFF);
     context->finalDigest[j+3] =((context->state[i] >> 24) & 0xFF);
   }
+}
+
+static void PrintDigest(MD5_CTX *context,char *optionVal)
+{
+  int i;
+  // print out original string
+  printf ("(\"%s\") = ", optionVal);
+    for (i = 0; i < 16; i++)
+    // print out result
+    printf ("%02x", context->finalDigest[i]);
+  printf ("\n\n");
 }
 
 //Main method ran when file is ran
@@ -255,7 +266,6 @@ int main()
   char optionVal[50];
   MD5_CTX context;
   unsigned int len;
-  int i;
 
   // Menu Options
   printf("1 - Enter a String to be hashed using MD5\n"); 
@@ -273,17 +283,13 @@ int main()
       scanf("%s", optionVal);
         len = strlen (optionVal);
 
-        // carry out hashing of string etered
+        // carry out hashing of string entered
         MD5Init (&context);
         MD5Update (&context, optionVal, len);
         MD5Final (&context);
+        //display digest result
+        PrintDigest(&context, optionVal);
 
-        // print out original string
-        printf ("(\"%s\") = ", optionVal);
-          for (i = 0; i < 16; i++)
-          // print out result
-          printf ("%02x", context.finalDigest[i]);
-        printf ("\n\n");
 			break;
 		default:
       // user enters a non specified number
