@@ -248,23 +248,36 @@ void MD5Final (MD5_CTX *context)
   }
 }
 
-static void PrintDigest(MD5_CTX *context,char *optionVal)
+static void PrintDigest(MD5_CTX *context,char *inputVal)
 {
   int i;
   // print out original string
-  printf ("(\"%s\") = ", optionVal);
+  printf ("(\"%s\") = ", inputVal);
     for (i = 0; i < 16; i++)
     // print out result
     printf ("%02x", context->finalDigest[i]);
   printf ("\n\n");
 }
 
+static void MD5_toString (char *inputVal)
+{
+  MD5_CTX context;
+  int len;
+  //get length of user inputted string
+  len = strlen (inputVal);
+  // carry out hashing of string entered
+  MD5Init (&context);
+  MD5Update (&context, inputVal, len);
+  MD5Final (&context);
+  //display digest result
+  PrintDigest(&context, inputVal);
+}
+
 //Main method ran when file is ran
 int main()
 {
   int option;
-  char optionVal[50];
-  MD5_CTX context;
+  char inputVal[256];
   unsigned int len;
 
   // Menu Options
@@ -280,16 +293,9 @@ int main()
 		{
 		case 1:
       printf("Please enter the String you wish to Hash: \n");
-      scanf("%s", optionVal);
-        len = strlen (optionVal);
-
-        // carry out hashing of string entered
-        MD5Init (&context);
-        MD5Update (&context, optionVal, len);
-        MD5Final (&context);
-        //display digest result
-        PrintDigest(&context, optionVal);
-
+      scanf("%s", inputVal);
+      //carry out MD5 hashing on the string and display
+      MD5_toString(inputVal);
 			break;
 		default:
       // user enters a non specified number
