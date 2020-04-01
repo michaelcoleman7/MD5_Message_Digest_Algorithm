@@ -248,7 +248,8 @@ void MD5Final (MD5_CTX *context)
   }
 }
 
-static void PrintDigest(MD5_CTX *context,char *inputVal)
+//Method to print out the final digest
+void PrintDigest(MD5_CTX *context,char *inputVal)
 {
   int i;
   // print out original string
@@ -259,7 +260,8 @@ static void PrintDigest(MD5_CTX *context,char *inputVal)
   printf ("\n\n");
 }
 
-static void MD5_toString (char *inputVal)
+//Method that takes a string and gets it's MD5 Digest
+void MD5_toString (char *inputVal)
 {
   MD5_CTX context;
   int len;
@@ -273,17 +275,52 @@ static void MD5_toString (char *inputVal)
   PrintDigest(&context, inputVal);
 }
 
-//Main method ran when file is ran
+//Method that take in a file and md5 hashes its contents into a digest
+void MD5_File (char *filename)
+{
+  FILE *inFile = fopen (filename, "rb");
+  MD5_CTX context;
+  int len;
+  unsigned char buffer[1024];
+
+  if (inFile == NULL) {
+    printf ("File: %s cannot be found, ensure it exists in current directory.\n", filename);
+    return;
+  }
+
+  MD5Init (&context);
+  while ((len = fread (buffer, 1, 1024, inFile)) != 0)
+    //keep updating until file is fully read
+    MD5Update (&context, buffer, len);
+  MD5Final (&context);
+  PrintDigest(&context, filename);
+  //close file when finished
+  fclose (inFile);
+}
+
+// Test suit that i sprovided on page 21 of RFC Document - Section A.5
+void MD5_TestSuite ()
+{
+  printf ("========== MD5 test suite: ==========\n\n");
+  MD5_toString ("");
+  MD5_toString ("a");
+  MD5_toString ("abc");
+  MD5_toString ("message digest");
+  MD5_toString ("abcdefghijklmnopqrstuvwxyz");
+  MD5_toString("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+  MD5_toString("12345678901234567890123456789012345678901234567890123456789012345678901234567890");
+}
+
+//Main method ran when file is executed
 int main()
 {
   int option;
   char inputVal[256];
-  unsigned int len;
 
   // Menu Options
   printf("1 - Enter a String to be hashed using MD5\n"); 
   printf("2 - Enter a File to be hashed using MD5\n"); 
-  printf("3 - Run Test Cases on MD5\n"); 
+  printf("3 - Run Test Cases on MD5 Documentation\n"); 
   printf("4 - Exit\n");  
 	scanf("%d", &option);
 
@@ -297,6 +334,19 @@ int main()
       //carry out MD5 hashing on the string and display
       MD5_toString(inputVal);
 			break;
+    case 2:
+      printf("Please enter the File you wish to Hash: \n");
+      scanf("%s", inputVal);
+
+      //carry out MD5 hashing on the file and display
+      MD5_File(inputVal);
+			break;
+    case 3:
+      MD5_TestSuite();
+			break;
+		case 4:
+      exit(0);
+			break;
 		default:
       // user enters a non specified number
 			printf("\nInvalid Input, Please Try Again\n\n");
@@ -306,7 +356,7 @@ int main()
   // Recall Menu Options
   printf("1 - Enter a String to be hashed using MD5\n"); 
   printf("2 - Enter a File to be hashed using MD5\n"); 
-  printf("3 - Run Test Cases from MD5 Documnetation\n"); 
+  printf("3 - Run Test Cases from MD5 Documentation\n"); 
   printf("4 - Exit\n");  
 	scanf("%d", &option);
 	}
