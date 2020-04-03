@@ -5,7 +5,10 @@
 Write a program in the C programming language that calculates the MD5 hash digest of an input. The algorithm is speciﬁed in the Request for Comments 1321 document supplied by the Internet Engineering Task Force. The only pre-requisite is that your program performs the algorithm — you are free to decide what input the algorithm should be performed on. It is suggested you allow the user to input some free text or a ﬁlename via the command line.
 
 ## How to run program
-- To be filled later .........
+- Clone repository into a folder/location
+- cd into project directory
+- Run command `gcc -o MD5 MD5.c` in terminal of project directory
+- Run `MD5` or `MD5.exe` command in terminal of project directory
 
 ## MD5 Overview
 MD5 message digest algorithm is used to produce a 128-bit message digest. MD5 takes the plain text of 512-bit blocks which is divided into 16 blocks, each of 32 bit and produces the 128-bit message digest which is a set of four blocks, each of 32 bits. MD5 produces the message digest through the following steps:
@@ -50,21 +53,25 @@ In the fifth week, I looked at the padding video on the SHA padding and how it w
 
 <b>Week 8:</b> In week 8, I followed the video on testing and refactoring the code and carried this out in my project. I then looked back at the code I had previously written and looked at the comparisons to see the scale of changes that the refactoring of the code had done to the project. 
 
+<b>Week 9:</b> In week 9, Production began on the MD5 algorithm, this entailed adding some of the functions and definitions needed for the algorithm which were got from the RFC Document. These include F, G, H and I functions as well as defining the context etc. Later focus began on the initialization method used for initialising the MD5 context values as well as the MD5 transform method which focuses on the states. This involves a process of 4 rounds being carried out using the functions defined in week 9. These methods are also outlined in the RFC Document in section A.3. These were started with due to being more simplistic than the rest of the methods left in the algorithm, as well as being needed for the next methods.
 
+<b>Week 10:</b> In week 10, An update was made to the transform method as well as updating many values which used UINT4 values.  The MD5 update method was then added. This can also be found in Section A.3 of the RFC document.
+
+<b>Week 11:</b> In week 11, The final method was added which is available in section A.3 of the RFC Document. Then a sample menu was added and a test of a string ‘abc’ was tested to ensure correct functionality. Later in the week, methods to exit application, hash user entered strings and files were added. Also test cases were added to ensure functionality by using the Test suite located in the RFC Document in section A.5.
 
 ### References
-[1] https://tools.ietf.org/html/rfc1321
+[1] RFC Document: https://tools.ietf.org/html/rfc1321
 
-[2] https://www.youtube.com/watch?v=-uRpRMpvdm0
+[2] MD5 Explanation video: https://www.youtube.com/watch?v=-uRpRMpvdm0
 
-[3] https://www.nist.gov/publications/secure-hash-standard
+[3] SHA256 Documentation: https://www.nist.gov/publications/secure-hash-standard
 
-[4] http://www.differencebetween.net/technology/difference-between-sha-and-md5/
+[4] MD5 vs SHA 1: http://www.differencebetween.net/technology/difference-between-sha-and-md5/
 
-[5] https://www.geeksforgeeks.org/difference-between-md5-and-sha1/
+[5] MD5 vs SHA 2: https://www.geeksforgeeks.org/difference-between-md5-and-sha1/
 
-[6] https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html#Expressions-and-Operators
+[6] C Expressions and Operators: https://www.gnu.org/software/gnu-c-manual/gnu-c-manual.html#Expressions-and-Operators
 
-[7] https://graphics.stanford.edu/~seander/bithacks.html
+[7] Bit Twiddling Tips: https://graphics.stanford.edu/~seander/bithacks.html
 
-[8] https://www.geeksforgeeks.org/difference-structure-union-c/
+[8] Struct vs Union: https://www.geeksforgeeks.org/difference-structure-union-c/
