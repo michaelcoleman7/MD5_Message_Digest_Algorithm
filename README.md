@@ -72,6 +72,8 @@ In the fifth week, I looked at the padding video on the SHA padding and how it w
 
 <b>Week 11:</b> In week 11, The final method was added which is available in section A.3 of the RFC Document. This method completes the digest value and updates it in the context structure. Then a sample menu was added and a test of a string ‘abc’ was tested to ensure correct functionality. Later in the week, methods to exit application, hash user entered strings and files were added. Also test cases were added to ensure functionality by using the Test suite located in the RFC Document in section A.5.
 
+<b>Week 13:</b> After an update with the project spec, changes were made to the menu system as this was replaced with entering command line parameters as inputs for user options. This involves using argc and argv, these allow the program to grab values from the command line and use them in the program execution.
+
 ### References
 [1] RFC Document: https://tools.ietf.org/html/rfc1321
 
