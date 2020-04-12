@@ -253,11 +253,11 @@ void PrintDigest(MD5_CTX *context,char *inputVal)
 {
   int i;
   // print out original string
-  printf ("(\"%s\") = ", inputVal);
+  printf ("\n(\"%s\") = ", inputVal);
     for (i = 0; i < 16; i++)
     // print out result
     printf ("%02x", context->finalDigest[i]);
-  printf ("\n\n");
+  printf ("\n");
 }
 
 //Method that takes a string and gets it's MD5 Digest
@@ -284,7 +284,7 @@ void MD5_File (char *filename)
   unsigned char buffer[1024];
 
   if (inFile == NULL) {
-    printf ("File: %s cannot be found, ensure it exists in current directory.\n", filename);
+    printf ("\nFile: %s cannot be found, ensure it exists in current directory.\n", filename);
     return;
   }
 
@@ -301,7 +301,7 @@ void MD5_File (char *filename)
 // Test suit that i sprovided on page 21 of RFC Document - Section A.5
 void MD5_TestSuite ()
 {
-  printf ("========== MD5 test suite: ==========\n\n");
+  printf ("\n========== MD5 test suite: ==========\n");
   MD5_toString ("");
   MD5_toString ("a");
   MD5_toString ("abc");
@@ -312,53 +312,28 @@ void MD5_TestSuite ()
 }
 
 //Main method ran when file is executed
-int main()
-{
-  int option;
-  char inputVal[256];
-
-  // Menu Options
-  printf("1 - Enter a String to be hashed using MD5\n"); 
-  printf("2 - Enter a File to be hashed using MD5\n"); 
-  printf("3 - Run Test Cases on MD5 Documentation\n"); 
-  printf("4 - Exit\n");  
-	scanf("%d", &option);
-
-	while (option != -1)
-	{
-		switch (option)
-		{
-		case 1:
-      printf("Please enter the String you wish to Hash: \n");
-      scanf("%s", inputVal);
-      //carry out MD5 hashing on the string and display
-      MD5_toString(inputVal);
-			break;
-    case 2:
-      printf("Please enter the File you wish to Hash: \n");
-      scanf("%s", inputVal);
-
-      //carry out MD5 hashing on the file and display
-      MD5_File(inputVal);
-			break;
-    case 3:
+int main(int argc, char *argv[])  
+{  
+  int i;
+    if (argc == 1){
+      printf("\nRun --help in command line for help e.g. MD5.exe --help\n");
+    }
+    for (i = 1; i < argc; i++)
+    if (strcmp (argv[i], "--help") == 0){
+      printf("\n============================================= Help Options =============================================\n"); 
+        printf("\nOption 1) --string - Enter --string , followed a String to be hashed using MD5 e.g. MD5.exe --string abc\n"); 
+        printf("\nOption 2) --file - Enter --file , followed by a File to be hashed using MD5 e.g. MD5.exe --file md5.c\n"); 
+        printf("\nOption 3) --test - Enter -test, Runs Test Cases from MD5 Documentation to ensure correctness e.g. MD5.exe --test\n"); 
+        printf("\nNotice:   Possible to run multiple commands at once e.g. MD5.exe --help --test --string abc --file md5.c\n");  
+    }
+    else if (strncmp (argv[i], "--string", 8) == 0){
+      MD5_toString(argv[i] + 9);
+    }
+    else if (strncmp (argv[i], "--file", 6) == 0){
+      MD5_File(argv[i] + 7);
+    }  
+    else if (strcmp (argv[i], "--test") == 0){
       MD5_TestSuite();
-			break;
-		case 4:
-      exit(0);
-			break;
-		default:
-      // user enters a non specified number
-			printf("\nInvalid Input, Please Try Again\n\n");
-			break;
-		}
-
-  // Recall Menu Options
-  printf("1 - Enter a String to be hashed using MD5\n"); 
-  printf("2 - Enter a File to be hashed using MD5\n"); 
-  printf("3 - Run Test Cases from MD5 Documentation\n"); 
-  printf("4 - Exit\n");  
-	scanf("%d", &option);
-	}
-  return 0;
+    }
+    return 0;
 }

@@ -4,6 +4,7 @@ sha256
 padding
 refactor
 endian
+MD5
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
