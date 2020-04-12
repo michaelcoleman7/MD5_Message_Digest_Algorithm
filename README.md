@@ -14,7 +14,7 @@ Write a program in the C programming language that calculates the MD5 hash diges
   - --string: This is used to MD5 hash a string which the user wishes to hash
   - --file: This is used to enter a File which contents user wishes to hash
   - --test: Run a set of test cases that are provided by the RFC Document to ensure the algorithm is correct
--An example of program execution are "MD5.exe --string abc", This hashes the string "abc"
+- An example of program execution are "MD5.exe --string abc", This hashes the string "abc".
 
 ## MD5 Overview
 MD5 message digest algorithm is used to produce a 128-bit message digest. MD5 takes the plain text of 512-bit blocks which is divided into 16 blocks, each of 32 bit and produces the 128-bit message digest which is a set of four blocks, each of 32 bits. MD5 produces the message digest through the following steps:
