@@ -14,7 +14,7 @@ Write a program in the C programming language that calculates the MD5 hash diges
   - --string: This is used to MD5 hash a string which the user wishes to hash
   - --file: This is used to enter a File which contents user wishes to hash
   - --test: Run a set of test cases that are provided by the RFC Document to ensure the algorithm is correct
-- An example of program execution are "MD5.exe --string abc", This hashes the string "abc".
+- An example of program execution are "MD5.exe --string abc". This hashes the string "abc".
 
 ## MD5 Overview
 MD5 message digest algorithm is used to produce a 128-bit message digest. MD5 takes the plain text of 512-bit blocks which is divided into 16 blocks, each of 32 bit and produces the 128-bit message digest which is a set of four blocks, each of 32 bits. MD5 produces the message digest through the following steps:
@@ -72,7 +72,7 @@ In the fifth week, I looked at the padding video on the SHA padding and how it w
 
 <b>Week 11:</b> In week 11, The final method was added which is available in section A.3 of the RFC Document. This method completes the digest value and updates it in the context structure. Then a sample menu was added and a test of a string ‘abc’ was tested to ensure correct functionality. Later in the week, methods to exit application, hash user entered strings and files were added. Also test cases were added to ensure functionality by using the Test suite located in the RFC Document in section A.5.
 
-<b>Week 13:</b> After an update with the project spec, changes were made to the menu system as this was replaced with entering command line parameters as inputs for user options. This involves using argc and argv, these allow the program to grab values from the command line and use them in the program execution.
+<b>Week 13:</b> After an update with the project specifications, changes were made to the menu system as this was replaced with entering command line parameters as inputs for user options. This involves using argc and argv, these allow the program to grab values from the command line and use them in the program execution.
 
 ### References
 [1] RFC Document: https://tools.ietf.org/html/rfc1321

@@ -1,0 +1,15 @@
+# MD5_Message_Digest_Algorithm
+4th Year semester 2 project for the Theory of Algorithms module. This project is coded on a Google Cloud Virtual Machine (Linux Debian 10). The project is also coded using VI as an editor.
+ 
+## Introduction
+This document includes an overview of the MD5 algorithm and its computation in C. This will look into areas such as how it's run, tested and the algorithm complexity as some examples of topics covered below.
+
+### Project Statement
+Write a program in the C programming language that calculates the MD5 hash digest of an input. The algorithm is speciﬁed in the Request for Comments 1321 document supplied by the Internet Engineering Task Force. The only prerequisite is that your program performs the algorithm — you are free to decide what input the algorithm should be performed on. It is suggested you allow the user to input some free text or a ﬁlename via the command line.
+
+### Repository Introduction
+The repository on github was used in order to keep track of progress throughout development. The repository contains a readme which describes the project and how it was carried out. The sections include a how to run section specifying how a user would go about downloading and running the project on their own computer. It also has a section which details how the algorithm works and a research and project progress summary which details the work that has gone into the project as well as research gone into the project throughout the development lifecycle. The repository also contains a gitignore. This is used to prevent unnecessary files from being uploaded to the github repository. This was used to prevent executable files that were compiled from being uploaded to the project throughout. This included test file executables as well as the actual md5 algorithm implementation file executables. The final thing in the repository is the actual c file which contains the implementation of the md5 hashing algorithm. 
+
+### Code Overview
+This code uses the md5 hashing algorithm to hash an input using a set of options available to the user. The user has the option to hash a string they input. This can be done by running the executable in the command line followed by the --string option and then after specify the string they wish to hash. An example input would be “MD5.exe --string abc“ This would hash the string “abc” using the md5 algorithm to produce an output. The user also has an option to hash a file’s contents using the algorithm. This is done by using the --file parameter option after the executable followed by the name of the file you wish to have it’s contents hashed. An example of command line input would be “MD5.exe --file filename.txt“. The last input which involves using the algorithm is the testing suite option. This is done by following the executable file with the --test parameter option. This is run using the following parameter in the command line “MD5.exe --test”. This runs a set of test cases which are outlined in the MD5 documentation to ensure that the algorithm carries out the hashing process correctly. 
+
