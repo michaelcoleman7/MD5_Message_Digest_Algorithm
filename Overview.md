@@ -1,8 +1,7 @@
-# MD5_Message_Digest_Algorithm
-4th Year semester 2 project for the Theory of Algorithms module. This project is coded on a Google Cloud Virtual Machine (Linux Debian 10). The project is also coded using VI as an editor.
- 
+# MD5 Message Digest Algorithm Overview Document
+
 ## Introduction
-This document includes an overview of the MD5 algorithm and its computation in C. This will look into areas such as how it's run, tested and the algorithm complexity as some examples of topics covered below.
+This document includes an overview of the MD5 algorithm and its computation in C. This will look into areas such as how it's run, tested and the algorithm complexity as some examples of topics covered below. This document is intended as a guide for students who would be using this algorithm in the next year and helps outline the understanding of MD5 as a hashing algorithm.
  
 ### Project Statement
 Write a program in the C programming language that calculates the MD5 hash digest of an input. The algorithm is speciﬁed in the Request for Comments 1321 document supplied by the Internet Engineering Task Force. The only prerequisite is that your program performs the algorithm — you are free to decide what input the algorithm should be performed on. It is suggested you allow the user to input some free text or a ﬁlename via the command line.
