@@ -20,6 +20,10 @@ Testing is carried out as specified in the above sections by running the --test 
 
 ## Algorithm
 This section details an overview of the MD5 algorithm and gives an explanation of its implementation within my code. The first part of the explanation will give a brief overview of the algorithm before going into specific details about the implementation. MD5 hashing is an algorithm which is used to produce a 128-bit message digest. A text of 512-bit blocks is divided into 16 blocks. Each of these 16-bit blocks consist of 32 bits. This results in a 128-bit message digest made up of 4 32-bit blocks.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/michaelcoleman7/MD5_Message_Digest_Algorithm/master/Images/md5hashing.png?token=AGMMKRRJ4D2QOENKSCGFASC6UCMYI">
+  <p align="center">Basic overview of hashing process</p>
+</p>
 
 In my algorithm, I chose that I would try to do the algorithm without the use of external libraries besides the library used for input and output (stdio.h). This was to reduce the reliance of my algorithm on external libraries which would do many parts of the implementation for me were they to be used. Throughout this explanation I will provide reasoning for the choices made in my implementation. 
 
@@ -44,3 +48,8 @@ The next method is the MD5 file method. This is used to read in the contents of 
 The final method excluding the main is the testing method. This method calls the MD5 string method on a number of test cases from the [RFC document](https://tools.ietf.org/html/rfc1321). These can be found in section A.5 on page 21.
 
 The last method in the algorithm is the main method. This is used in order to allow the user to select the options they wish to use. This is done by allowing the user to enter command line parameters in order to carry out actions on their desired input. The first option is run when the user runs the executable and enters no parameters. This displays that they should run the command --help in order to get details on the options available to them. Upon running the executable with this command, a list of possible options are displayed to the user. This option is recognised by comparing the string using “strcmp” to compare the values in the command line to the command. This compares the text in the command line to the exact term --help. This is also done using the same method to run the tests with the --test command. The MD5 string and file options use the “strncmp” option as they need to select the user input which is to be hashed using the selected option. --string and --file are called to run tests of a string and file contents, respectively. The user must leave a space between the option to get their input to be hashed correctly. This is due to when the option is detected the “strncmp” skips over the length of the input e.g. --string, then a space and takes the next user input option. 
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/michaelcoleman7/MD5_Message_Digest_Algorithm/master/Images/algorithmDiagram.png?token=AGMMKRUTQ6LZCDGD632OYFC6UCNKK">
+  <p align="center">Diagram of Algorithm Methods Cycle</p>
+</p>
