@@ -93,7 +93,31 @@ The algorithm then uses each 512-bit message block in turn to modify the state. 
 
 After all rounds have been performed, the buffers A, B, C, D contain the MD5 output starting with lower bit A and ending with higher bit D.
 
+## Reversing the algorithm
+The algorithm is theoretically impossible to reverse directly, i.e. it is not possible to retrieve the original string from a given hash using only mathematical operations. The way many attackers use to “decrypt” the algorithm is that they use large dictionaries with millions of entries which acts as a look up table for discovering the value of a hash. Many algorithms try to prevent this through the use of a “salt”, however with MD5, this is not the case. With MD5 there are many different methods of “breaking” the algorithm. In this section I will discuss some of the methods of showcasing the vulnerabilities of MD5 as a hashing algorithm explaining what they are and delving into algorithms which were used to ”break” MD5.
 
+### Dictionary Attack
+This is a method of brute force attacking an algorithm in order to determine its original input or decryption. This technique involves running through a list of likely possibilities, often a list of words from a dictionary, hence the name. These are often successful due to many people chasing poor easy to guess passwords. Dictionary attacks are carried out by precomputing hash values for a given dictionary file and comparing target password hashes to the precomputed tables looking for a match, or a dictionary file of words is hashed and then compared against a target password hash to try find a match [5].
+
+### Brute force attacks
+This is perhaps the most basic of all algorithm attacks, this involves trying every possible value to try and get a matching value. This is very expensive for a potential attacker as testing every possibility is an expensive task. 
+
+### Collision Attacks
+A collision attack on a cryptographic hash tries to find two inputs producing the same hash value. As a result of hash functions allowing infinite input length and compute a predefined output length, there will be a possibility that two or more inputs produce the same output from a hashing operation. When this occurs, a collision has taken place. The collision then results in a possible exploitation of the hashing algorithm. An example of this would be seen through the downloading of a file which used a hash function as an integrity verification method. If an attacker was aware of a collision matching the hash, then they could swap the file without the user’s knowledge [6]. An example of this was discovered in MD5 in 2004 by Xiaoyun Wang. It describes a manually found differential path for MD5 and showcases the concept of near collision blocks: a pair of input blocks that results in specifically targeted output differences [7]. It allows computation of a new collision in a couple of hours of CPU time. Dan Kaminsky published a paper showing that the file transfer mentioned above was possible using MD5 based on the discoveries by Wang [8]. 
+
+#### Chosen-prefix collision attack
+This is an extension of the aforementioned collision attack. This allows an attacker to choose two different documents, and then append different calculated values that result in the documents having an equal hash value. An example of this in MD5 can be seen by an algorithm produced by Marc Stevens, Arjen Lenstra and Benne de Weger [9]. This algorithm uses chosen-prefix collisions to find an automated way to find differential paths for MD5. This algorithm shows that approximately 2^39 calls to the MD5 compression function it is possible, for any chosen m1 and m2 to construct s1 and s2 such that MD5(m1 || s1) == MD5(m2 || s2). This was due to using a more powerful birthday search (Attack based on the exploitation of the mathematics behind the birthday problem in probability theory i.e a certain number of students in a class reveal their birthday and the likelihood of a collision of birthdays is calculated). In short, they use two arbitrary messages and run them through their designed algorithm such that the extended messages collide under MD5. A breakdown of the algorithm can be found in [Chosen-prefix collisions for MD5 and applications](https://documents.epfl.ch/users/l/le/lenstra/public/papers/lat.pdf) under section 3 on pages 327 and 328.
+
+<p align="center">
+  <img src="https://cdn.arstechnica.net/wp-content/uploads/2012/06/collision_attack_overview.png">
+  <p align="center">Chosen-Prefix Collision Overview</p>
+</p>
+
+#### Tunneling
+Tunneling in hash functions is a concept which was introduced by Vlastimil Kilma in 2006. These tunnels replace multi-message modification methods and exponentially accelerate collision search. Kilma created a document in which he describes an algorithm used to find MD5 collisions within a minute [10]. This document details how the solution to the tunneling was produced and it explains how the tunnelling is carried out. The algorithm uses nested for loops to iteratively check through all possible combinations for the tunnels within the first block, if probabilistic conditions are met, then it calls the block 2 function. The block 2 function is similar to block ones but using new conditions and vectors for initialisation. If a colliding message is found, then they are displayed. This tunneling can find a collision in less than a minute, which is a massive difference in multi-message modification attacks which can take many hours to find a collision in MD5.
+
+### Conclusion to reversing MD5
+Though not possible to reverse directly as stated before I hope that the few areas I have highlighted have shed some light on how the algorithm is considered “unsuitable” for use and how alternative hashing algorithms such as SHA-256 should be used in real world implementations as an alternative. Though I have only scratched the surface here as there are many more ways in which MD5 has shown vulnerabilities, for example preimage attacks, single-block collision attacks etc are possible on MD5. These areas are certainly worth looking into and understanding as a student who would be undertaking this project if you wish to truly grasp the vulnerabilities of MD5 as a hashing algorithm.
 
 
 ## References
@@ -101,7 +125,23 @@ After all rounds have been performed, the buffers A, B, C, D contain the MD5 out
  
 [2] [Cryptographic Hashing Functions - MD5- Farhad Ahmed Sagar](https://cs.indstate.edu/~fsagar/doc/paper.pdf): Breaks down the padding process of MD5 into a very readable and understandable format. Helps validate my points made in the document.
  
-[3] [RFC Document](https://tools.ietf.org/html/rfc1321)
-: The RFC document which outlines MD5’s implementation, Does the best job of properly explaining the action of appending the length from my research. Used to verify points made on reasoning for appending length.
+[3] [RFC Document](https://tools.ietf.org/html/rfc1321): The RFC document which outlines MD5’s implementation, Does the best job of properly explaining the action of appending the length from my research. Used to verify points made on reasoning for appending length.
  
 [4] [A review of Comparative Study of MD5 and SHA Security Algorithm - Surbhi Aggarwal, Neha Goyal and Kirti Aggarwal](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.736.1789&rep=rep1&type=pdf): Explains the processing of the blocks in great detail with a very readable diagram helping understanding of the process carried out by the functions. Supplements my points made on the block processing and the 4 sets of 16 rounds carried out during the transform.
+
+[5] [Dictionary Attack on MD5 Hash](https://pdfs.semanticscholar.org/5988/011e62a6c6ae7bc849bc422bd4132e9dde73.pdf): Explains the process of dictionary attacks for the MD5 algorithm. This helps verify the definition made about what dictionary attacks are in the context of the MD5 hashing algorithm.
+ 
+[6] [Hash Collision Attack - Privacy Canada](https://privacycanada.net/hash-functions/hash-collision-attack/):
+This gives an explanation of collision attacks and how they could be used to exploit a vulnerable hashing algorithm. This supplements my points on hash collisions and the vulnerabilities they possess.
+ 
+[7] [How to Break MD5 and Other Hash Functions - Xiaoyun Wang and Hongbo Yu](http://merlot.usc.edu/csac-f06/papers/Wang05a.pdf):
+Explains the process that was used to carry out collision attacks on the MD5 algorithm. This is the document Wang published about his research and the process of his work on MD5 which was mentioned in the overview discussing in greater detail than in this overview.
+ 
+[8] [MD5 To Be Considered Harmful Someday - Dan Kaminsky](https://eprint.iacr.org/2004/357.pdf):
+Paper by Kaminsky which explains how it is possible for the MD5 algorithm to be harmful as two files could be swapped. Highlighting the danger of the algorithm. Explains in detail how my point about file swapping could be carried out by an attacker exploiting the MD5 hashing algorithm.
+ 
+[9] [Chosen-prefix collisions for MD5 and applications - Marc Stevens, Arjen K. Lenstra, Benne de Weger](https://documents.epfl.ch/users/l/le/lenstra/public/papers/lat.pdf):
+Document on the breakdown of an algorithm of chosen-prefix collisions for MD5. Showcases the complexity of the algorithm discussed in the overview and how it was achieved.
+ 
+[10] [Tunnels in Hash Functions: MD5 Collisions Within a Minute - Vlastimil Klima](https://eprint.iacr.org/2006/105.pdf):
+Document describing tunneling in MD5. This document details how the task was undertaken and the complexity of the algorithm which was mentioned in the overview expanding on my points.
