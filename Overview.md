@@ -53,3 +53,55 @@ The last method in the algorithm is the main method. This is used in order to al
   <img src="https://raw.githubusercontent.com/michaelcoleman7/MD5_Message_Digest_Algorithm/master/Images/algorithmDiagram.png?token=AGMMKRUTQ6LZCDGD632OYFC6UCNKK">
   <p align="center">Diagram of Algorithm Methods Cycle</p>
 </p>
+
+## Complexity
+This section goes into detail about the complexity of the MD5 algorithm and how it works. It also talks about how the MD5 algorithm may be reversed e.g. the pursuit of finding an input for a given output of a hashed MD5 digest.
+ 
+### MD5 Overview
+Firstly, I will give a basic intro into MD5 and its inception. MD5 message-digest algorithm is used to produce a 128-bit hash value. It was designed by Ronald Rivest in 1991 to be a predecessor to MD4. In its original creation it was designed to be a cryptographic hash function. However, this is now not the case as it has been declared “cryptographically broken and unsuitable for further use.” [1]. MD5 consists of many vulnerabilities which have been exposed, for example, a cryptographic hash function should result in it being computationally infeasible to find two distinct messages that hash the same value, however with MD5 this is not the case, that is two inputs may both hash to the same output. Later in this section I will go into more detail on this topic.
+ 
+### MD5 Complexity
+As stated, the goal of MD5 hashing algorithm is to produce a 128-bit hash value. The input message is broken up into chunks of 512-bit blocks (16 32-bit words). In the event that the input is not a multiple of 512-bit blocks, the message is padded such that its length in bits is agreeable to 448 modulo 512. Padding is done so that the total bits are 64 less than a multiple of 512 bits length. Padding is carried out even if it is already in the form of 448 modulo 512. Padding is carried out as follows, A single 1 is appended to the message, then a series of 0’s is added until the message is congruent to 448, modulo 512. The least one bit must be padded and at most 512 bits are appended to the message [2].
+
+The next step is appending the length where 64 bits are inserted at the end representing the length of the original message, modulo 2^64. In the event that this is greater than 2^64, then only the low order byte of the original length is used. After this the message should be an exact multiple of 512 bits. This also means that the message is a multiple of 16 32-bit words [3].
+
+The MD5 algorithm operates on a 128-bit state, this is divided into four 32-bit words, represented as A, B, C, and D. These are initialized into fixed constants. These constants are:
+
+
+
+| 32-bit words        | Constants           | Hexadecimal Value  |
+| :-------------: |:-------------:|:-------------:|
+| A     | 0x67452301 | 01 23 45 67 |
+| B      | 0xEFCDAB89      |   89 ab cd ef |
+| C | 0x98BADCFE     |    fe dc ba 98 |
+| D | 0x10325376      |    76 54 32 10 |
+
+The next step in the algorithm is to process the message into 16-word blocks. To carry out this process four auxiliary functions are needed. These take inputs as three individual 32 bit words and produce a single 32 bit word output. They apply the logical operators and, or, not and xor to the input bits. These are defined as follows:
+
+- F (X,Y,Z) = XY v not(X) Z
+- G (X,Y,Z) = XZ v Y not(Z)
+- H (X,Y,Z) = X xor Y xor Z
+- I (X,Y,Z) = Y xor (X v not(Z))
+
+The algorithm then uses each 512-bit message block in turn to modify the state. The processing of a message block consists of four similar rounds. each round is composed of 16 similar operations based on the above auxiliary functions. One of the functions F, G, H and I used per round [4].
+[Below MD5 Process image source](https://www.researchgate.net/profile/Dipesh_Vaya/publication/320477119/figure/fig1/AS:550995438182400@1508378957589/Process-of-MD5-Algorithm.png)
+<p align="center">
+  <img src="https://www.researchgate.net/profile/Dipesh_Vaya/publication/320477119/figure/fig1/AS:550995438182400@1508378957589/Process-of-MD5-Algorithm.png">
+  <p align="center">MD5 Process</p>
+</p>
+
+
+After all rounds have been performed, the buffers A, B, C, D contain the MD5 output starting with lower bit A and ending with higher bit D.
+
+
+
+
+## References
+[1] [Reversing an MD5 hash - John Cook](https://www.johndcook.com/blog/2019/01/24/reversing-an-md5-hash/): Talks about how the algorithm used to be used until it was declared "cryptographically broken and unsuitable for further use." It also explains some of the security issues posed by the MD5 hashing algorithm. Helps in my explanation of the downfall of MD5 in the cryptography industry.
+ 
+[2] [Cryptographic Hashing Functions - MD5- Farhad Ahmed Sagar](https://cs.indstate.edu/~fsagar/doc/paper.pdf): Breaks down the padding process of MD5 into a very readable and understandable format. Helps validate my points made in the document.
+ 
+[3] [RFC Document](https://tools.ietf.org/html/rfc1321)
+: The RFC document which outlines MD5’s implementation, Does the best job of properly explaining the action of appending the length from my research. Used to verify points made on reasoning for appending length.
+ 
+[4] [A review of Comparative Study of MD5 and SHA Security Algorithm - Surbhi Aggarwal, Neha Goyal and Kirti Aggarwal](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.736.1789&rep=rep1&type=pdf): Explains the processing of the blocks in great detail with a very readable diagram helping understanding of the process carried out by the functions. Supplements my points made on the block processing and the 4 sets of 16 rounds carried out during the transform.
