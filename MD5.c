@@ -298,7 +298,9 @@ void MD5_File (char *filename)
   fclose (inFile);
 }
 
-// Test suit that i sprovided on page 21 of RFC Document - Section A.5
+// Test suit that is provided on page 21 of RFC Document - Section A.5
+// These output the the string entered and the result which produce the same output as the Tests in the RFC Document
+// ensuring that the algorithm works correctly
 void MD5_TestSuite ()
 {
   printf ("\n========== MD5 test suite: ==========\n");
@@ -315,10 +317,12 @@ void MD5_TestSuite ()
 int main(int argc, char *argv[])  
 {  
   int i;
+    // Ran when executable is ran with no parameters, informs them of --help option
     if (argc == 1){
       printf("\nRun --help in command line for help e.g. MD5.exe --help\n");
     }
     for (i = 1; i < argc; i++)
+    //display list of options for user if --help found in command line
     if (strcmp (argv[i], "--help") == 0){
       printf("\n============================================= Help Options =============================================\n"); 
         printf("\nOption 1) --string - Enter --string , followed a String to be hashed using MD5 e.g. MD5.exe --string abc\n"); 
@@ -326,12 +330,15 @@ int main(int argc, char *argv[])
         printf("\nOption 3) --test - Enter -test, Runs Test Cases from MD5 Documentation to ensure correctness e.g. MD5.exe --test\n"); 
         printf("\nNotice:   Possible to run multiple commands at once e.g. MD5.exe --help --test --string abc --file md5.c\n");  
     }
+    //if --string found then MD5 hash the string followed by this command 
     else if (strncmp (argv[i], "--string", 8) == 0){
       MD5_toString(argv[i] + 9);
     }
+    //if --file found then MD5 hash the files contents of file that is followed by this command 
     else if (strncmp (argv[i], "--file", 6) == 0){
       MD5_File(argv[i] + 7);
     }  
+    //if --test found, then run the test cases provided in the RFC document
     else if (strcmp (argv[i], "--test") == 0){
       MD5_TestSuite();
     }
