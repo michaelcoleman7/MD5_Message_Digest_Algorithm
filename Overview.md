@@ -14,9 +14,19 @@ This code uses the md5 hashing algorithm to hash an input using a set of options
  
 ## Running the code
 The first step to running the code is to either download or clone the repository from github. This can be done via the command line using “git clone” followed by the repository link or by pressing the download button on GitHub and unzipping the zip file into your desired directory. The next step is to compile the code. This includes opening a terminal in the directory of the cloned/downloaded project, then running the command “gcc -o MD5 md5.c” where MD5 is the name which will be given to your executable file. This executable file can be run in a command terminal by entering the name of the executable or the name of the executable followed by .exe i.e. “MD5” or “MD5.exe”. The parameters mentioned above in the code overview section can then be used to run the application. There is also an additional --help parameter option which displays the options to the user and samples of how to run each.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/michaelcoleman7/MD5_Message_Digest_Algorithm/master/Images/runningExamplePNG.PNG?token=AGMMKRUTU4F4P2V4CVDMKO26UGXCY">
+  <p align="center">Creating MD5.exe Example</p>
+</p>
  
 ## Testing
 Testing is carried out as specified in the above sections by running the --test parameter option in the command line. This uses the selection of test cases given in the [RFC document](https://tools.ietf.org/html/rfc1321) in section A.5, page 21. This automatically runs all these tests by hashing them and displaying the hashing algorithms results. As stated in the code section above the command line input for executing these tests is “MD5.exe --test” where MD5 is the executable name.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/michaelcoleman7/MD5_Message_Digest_Algorithm/master/Images/testsuite.PNG?token=AGMMKRT5IDJSO3CSRDAEQ4C6UGXIM">
+  <p align="center">Example of running test suite</p>
+</p>
 
 ## Algorithm
 This section details an overview of the MD5 algorithm and gives an explanation of its implementation within my code. The first part of the explanation will give a brief overview of the algorithm before going into specific details about the implementation. MD5 hashing is an algorithm which is used to produce a 128-bit message digest. A text of 512-bit blocks is divided into 16 blocks. Each of these 16-bit blocks consist of 32 bits. This results in a 128-bit message digest made up of 4 32-bit blocks.
